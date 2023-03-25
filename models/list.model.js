@@ -1,18 +1,20 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
-const { Schema } = mongoose
+const {Schema} = mongoose;
 
 const listSchema = new Schema({
-    userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-    },
-    name: {
-        type: String,
-        required: true,
-    },
-})
+  name: {
+    type: String,
+    required: true
+  },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  createdDate: {
+    type: Date,
+    default: Date.now
+  }
+});
 
-const List = mongoose.model('List', listSchema)
-
-module.exports = List
+module.exports = mongoose.model('List', listSchema);

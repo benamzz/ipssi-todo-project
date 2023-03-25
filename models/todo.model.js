@@ -1,29 +1,32 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
-const { Schema } = mongoose
+const {Schema} = mongoose;
 
 const todoSchema = new Schema({
-    listId: {
-        type: mongoose.Schema.Types.ObjectId,
-        unique: true,
-        ref: 'List',
-    },
-    name: {
-        type: String,
-        required: true,
-    },
-    ShortContent: {
-        type: String,
-        required: true,
-        maxLength: 50,
-    },
-    LongContent: {
-        type: String,
-        required: true,
-        minLength: 50,
-    },
-})
+  description: {
+    type: String,
+    required: true
+  },
+  details: {
+    type: String,
+    default: ''
+  },
+  dueDate: {
+    type: Date,
+  },
+  completed: {
+    type: Boolean,
+    default: false
+  },
+  list: {
+    type: Schema.Types.ObjectId,
+    ref: 'List'
+  },
+  createdDate: {
+    type: Date,
+    default: Date.now
+  }
+});
 
-const Todo = mongoose.model('Todo', todoSchema)
+module.exports = mongoose.model('Todo', todoSchema);
 
-module.exports = Todo
