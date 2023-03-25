@@ -8,7 +8,7 @@ const Todo = require('../models/todo.model')
 // Get all lists
 router.get('/', authMiddleware, async (req, res) => {
   try {
-    const lists = await List.find({ user: req.user._id })
+    const lists = await List.find({ user: req.user.userId })
     res.json(lists)
   } catch (error) {
     console.error(error.message)
@@ -19,7 +19,7 @@ router.get('/', authMiddleware, async (req, res) => {
 // Get list by id
 router.get('/:id', authMiddleware, async (req, res) => {
   try {
-    const list = await List.findOne({ _id: req.params.id, user: req.user._id })
+    const list = await List.findOne({ _id: req.params.id, user: req.user.userId })
     if (!list) {
       return res.status(404).json({ msg: 'List not found' })
     }
@@ -34,13 +34,14 @@ router.get('/:id', authMiddleware, async (req, res) => {
 router.post('/', authMiddleware, async (req, res) => {
   const { name } = req.body
   try {
-    const listExists = await List.findOne({ name, user: req.user._id })
+    const listExists = await List.findOne({ name, user: req.user.userId })
     if (listExists) {
       return res.status(400).json({ msg: 'List already exists' })
     }
+    console.log(req.user.userId)
     const newList = new List({
       name,
-      user: req.user._id
+      user: req.user.userId
     })
     await newList.save()
     res.json(newList)
@@ -53,7 +54,7 @@ router.post('/', authMiddleware, async (req, res) => {
 // Update list by id
 router.patch('/:id', authMiddleware, async (req, res) => {
   try {
-    const list = await List.findOneAndUpdate({ _id: req.params.id, user: req.user._id }, req.body, {
+    const list = await List.findOneAndUpdate({ _id: req.params.id, user: req.user.userId }, req.body, {
       new: true,
       runValidators: true
     })
@@ -70,7 +71,7 @@ router.patch('/:id', authMiddleware, async (req, res) => {
 // Delete list by id
 router.delete('/:id', authMiddleware, async (req, res) => {
     try {
-      const list = await List.findOne({ _id: req.params.id, user: req.user._id })
+      const list = await List.findOne({ _id: req.params.id, user: req.user.userId })
       if (!list) {
         return res.status(404).json({ msg: 'List not found' })
       }
