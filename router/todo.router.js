@@ -6,7 +6,7 @@ const Todo = require('../models/todo.model');
 const List = require('../models/list.model');
 
 // Get all todos for a list
-router.get('/lists/:listId/todos', async (req, res) => {
+router.get('/lists/:listId', async (req, res) => {
   try {
     const todos = await Todo.find({ list: req.params.listId });
     res.json(todos);
@@ -16,7 +16,7 @@ router.get('/lists/:listId/todos', async (req, res) => {
   }
 });
 // Get all completed todos
-router.get('/todos/completed', async (req, res) => {
+router.get('/completed', async (req, res) => {
   try {
     const todos = await Todo.find({ user: req.user._id, completed: true });
     res.json(todos);
@@ -28,7 +28,7 @@ router.get('/todos/completed', async (req, res) => {
 
 // Create a new todo in a specific list
 router.post(
-  '/lists/:listId/todos',
+  '/lists/:listId',
   [
     body('description', 'Descrition is required').not().isEmpty(),
     body('details', 'details is required').not().isEmpty(),
@@ -70,7 +70,7 @@ router.post(
 );
 
 // Update a todo by id
-router.patch('/todos/:id', async (req, res) => {
+router.patch('/:id', async (req, res) => {
   try {
     const todo = await Todo.findById(req.params.id);
     if (!todo) {
@@ -90,7 +90,7 @@ router.patch('/todos/:id', async (req, res) => {
 });
 
 // Delete a todo by id
-router.delete('/todos/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const todo = await Todo.findById(req.params.id);
     if (!todo) {

@@ -15,7 +15,7 @@ app.use(express.urlencoded({ extended: false }))
 
 app.use('/auth', authRouter)
 app.use('/list',isAuthenticated, listRouter)
-app.use('/',isAuthenticated, todoRouter)
+app.use('/todo',isAuthenticated, todoRouter)
 
 app.use((err, req, res) => {
     res.status(500).json({ status: 'error', message: err })
